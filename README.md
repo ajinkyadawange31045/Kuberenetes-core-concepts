@@ -26,6 +26,7 @@ Secret Config Maps***
 **Note:** In Docker, container is a smalletst part that we can deploy where as in K8S POD is smallet part we can deploy	
 **Note:** To get clarify on PODS, we need to understand Namespaces first in K8S
 
+_______________________________________________________________________________________________________________________________________________________
 ## What is Namespace? 
 - Namespace represents a cluster inside another cluster
 - Kubernetes components will be grouped logically using namespace
@@ -88,7 +89,7 @@ kubectl get pods
 ```
 Note: If we delete a namespace, all the objects / resources / components also gets deleted
 
-
+_______________________________________________________________________________________________________________________________________________________
 ## What is POD
 - POD is a smallest build block what we can execute inside K8S cluster
 - POD will execute in a node
@@ -97,7 +98,7 @@ Note: If we delete a namespace, all the objects / resources / components also ge
 - POD represents running process
 - Containers inside the POD will share a unique network ip, sotrage and other specifications
 
-
+_______________________________________________________________________________________________________________________________________________________
 ## How to run our application in K8S ?
 To run our docker image we need to create a pod then k8s will execute that pod in a node
 **Note:** If we have pod then we can send request to K8S to schedule that POD execution.
@@ -168,7 +169,7 @@ curl pod-ip:8080
 **Note**: We can't access POD using POD IP outside of the cluster (this is default behaviour)
 
  
-**POD Lifecycle **
+**POD Lifecycle**
 - Make a request to API server using manifest file (YML) to create a POD
 - API server will save the POD info in ETCD
 - Schedular find un-scheduled POD info and schedule that POD for execution in NODE
@@ -251,7 +252,154 @@ URL access to app : http://ec2-vm-ip:nodeport/context-path
 Q) What is the range of Node PORT in k8s cluster?
 Ans) 30000 - 32767
 
-  
+_______________________________________________________________________________________________________________________________________________________
+
+
+-> In the above scenario we have created the POD manually (it is not recommended)
+
+-> If we create the POD then K8S will not provide high availability
+
+
+# lets test it by deleting our pod
+$ kubectl delete pod <pod-name>
+
+Note: once pod got delete, k8s not creating another pod and application went down (not accessible)
+
+
+-> If we want to achieve high availability then we should not create pods manually
+
+
+-> We need to use K8S components to create PODS then k8s will provide high availability for our application
+
+
+Note: High Availability means always our application should be accessible
+
+ReplicationController
+ReplicationSet
+DaemonSet
+Deployment
+StatefulSets
+
++++++++++++++++++++++++++++++
+What is Replication Controller ?
+++++++++++++++++++++++++++++
+
+-> It is one of the key feature in k8s
+
+-> It is responsible to manage POD lifecycle
+
+-> It will make sure given no.of POD replicas are running at any point of time.
+
+Note: if any POD got crashed/deleted/dead then Replication Controller will replace it.
+
+-> Replication Controller is providing facility to create multiple PODS and it will make sure PODS always exists to run our application.
+
+-> Using Replication controller we can achieve High Availability
+
+-> Replication Controller and PODS are associated with Labels and Selectors.
+
+---
+# pod manifest configuration
+apiVersion: v1
+kind: ReplicationController
+metadata:
+ name: javawebapprc
+spec: 
+  replicas: 1
+  selector:
+    app: javawebapp
+  template:
+    metadata:
+      name: javawebapppod
+      labels:
+        app: javawebapp
+    spec:
+      containers:
+       - name: javawebappcontainer
+         image: ashokit/javawebapp
+         ports:
+          - containerPort: 8080
+---
+# node-port service manifest
+apiVersion: v1
+kind: Service
+metadata:
+  name: javawebappsvc
+spec:
+  type: NodePort
+  selector:
+    app: javawebapp
+  ports:
+     - port: 80
+       targetPort: 8080
+
+...
+- In the above scenario we have created the POD manually (it is not recommended)
+- If we create the POD then K8S will not provide high availability
+_____________________________________________________________________________________________________________________________________________
+
+**lets test it by deleting our pod**
+```kubectl delete pod <pod-name>```
+**Note:** once pod got delete, k8s not creating another pod and application went down (not accessible)
+
+- If we want to achieve high availability then we should not create pods manually
+- We need to use K8S components to create PODS then k8s will provide high availability for our application
+
+**Note:** High Availability means always our application should be accessible
+
+ReplicationController
+ReplicationSet
+DaemonSet
+Deployment
+StatefulSets
+
+## What is Replication Controller ?
+- It is one of the key feature in k8s
+- It is responsible to manage POD lifecycle
+- It will make sure given no.of POD replicas are running at any point of time.
+
+**Note:** if any POD got crashed/deleted/dead then Replication Controller will replace it.
+- Replication Controller is providing facility to create multiple PODS and it will make sure PODS always exists to run our application.
+- Using Replication controller we can achieve High Availability
+- Replication Controller and PODS are associated with Labels and Selectors.
+```bash
+---
+#pod manifest configuration
+apiVersion: v1
+kind: ReplicationController
+metadata:
+ name: javawebapprc
+spec: 
+  replicas: 1
+  selector:
+    app: javawebapp
+  template:
+    metadata:
+      name: javawebapppod
+      labels:
+        app: javawebapp
+    spec:
+      containers:
+       - name: javawebappcontainer
+         image: ashokit/javawebapp
+         ports:
+          - containerPort: 8080
+---
+#node-port service manifest
+apiVersion: v1
+kind: Service
+metadata:
+  name: javawebappsvc
+spec:
+  type: NodePort
+  selector:
+    app: javawebapp
+  ports:
+     - port: 80
+       targetPort: 8080
+
+...
+```
 
 
 
