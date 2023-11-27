@@ -1,6 +1,7 @@
 # Kuberenetes-core-concepts
 
-Kubernets Resources / Objects / Workloads
+Kubernets Resources / Objects / Workloads <br>
+
 ***Container
 POD
 Namespaces
@@ -257,7 +258,8 @@ Ans) 30000 - 32767
 _____________________________________________________________________________________________________________________________________________
 
 **lets test it by deleting our pod**
-```kubectl delete pod <pod-name>```
+```kubectl delete pod <pod-name>``` 
+<br>
 **Note:** once pod got delete, k8s not creating another pod and application went down (not accessible)
 
 - If we want to achieve high availability then we should not create pods manually
@@ -318,8 +320,126 @@ spec:
 
 ...
 ```
+____________________________________________________________________________________________________________________________________________________
 
+## What is Replica Set?
+- It is next generation of Replication Controller
+- It is also used to manage POD life cycle
+- We can scale up and scale down PODS using Replica Set also
+-  The only difference between Replication Controller and Replication Set is 'Selector support'
 
+- We have 2 types of Selectors
+**1) Equality Selector**
+Ex:
+selector:
+  app: javawebappp
+  
+**2) Set based Selector**
+Ex:
+```
+selector:
+  matchExpressions:
+     - key : app
+       operator : in
+		values: 
+		   - javapp
+		   - javaweb
+		   - javawebapp
+
+```
+
+```bash
+---
+#pod manifest configuration
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+ name: javawebapprc
+spec: 
+  replicas: 1
+  selector:
+    matchLabels: 
+	app: javawebapp
+  template:
+    metadata:
+      name: javawebapppod
+      labels:
+        app: javawebapp
+    spec:
+      containers:
+       - name: javawebappcontainer
+         image: ashokit/javawebapp
+         ports:
+          - containerPort: 8080
+---
+
+# node-port service manifest
+apiVersion: v1
+kind: Service
+metadata:
+  name: javawebappsvc
+spec:
+  type: NodePort
+  selector:
+    app: javawebapp
+  ports:
+     - port: 80
+       targetPort: 8080
+...
+```
+
+_______________________________________________________________________________________________________________________________________________________
+## What is DaemonSet ?
+- A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. As nodes are added to the cluster, Pods are added to them. As nodes are removed from the cluster, those Pods are garbage collected. 
+- Deleting a DaemonSet will clean up the Pods it created.
+- Some typical uses of a DaemonSet are:
+
+1) running a cluster storage daemon on every node
+2) running a logs collection daemon on every node
+3) running a node monitoring daemon on every node
+
+**Note**: Replicas not applicable for DaemonSet
+```bash
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: logging
+spec:
+  selector:
+    matchLabels:
+      app: httpd-logging
+  template:
+    metadata:
+      labels:
+        app: httpd-logging
+    spec:
+      containers:
+        - name: webserver
+          image: httpd
+          ports:
+            - containerPort: 80
+...
+```
+- Manually POD Created ( Not recommended )
+- POD creation using ReplicationController
+- POD creation using ReplicaSet
+- POD creation using DaemonSet
+
+- In above concepts Auto-Scaling feature not available (Manuallu we need to scale our pods)
+- There is no option to rollback our pods creation.
+= To overcome these problems We have "Deployment" concept
+
+_______________________________________________________________________________________________________________________________________________________
+## What is Deployment ?
+- Deploymet is used to tell Kubernetes how to create or modify instances of the pods
+- By using Deployment we can rollout and rollback our application deployment (if required)
+- We can achieve Auto-Scaling by Deployment
+  
+**Deployment Strategy**
+1) ReCreate
+2) Rolling Update
+3) Blue / Green  ( Approach )
 
 
 
