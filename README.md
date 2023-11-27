@@ -163,7 +163,7 @@ kubectl describe pod javawebapppod
 kubectl get pods -o wide
 ```
 
-Note: we can access the POD across the cluster using POD IP.
+**Note:** we can access the POD across the cluster using POD IP.
 
 ```bash
 curl pod-ip:8080
@@ -171,14 +171,14 @@ curl pod-ip:8080
 **Note**: We can't access POD using POD IP outside of the cluster (this is default behaviour)
 
  
-**POD Lifecycle**
+### POD Lifecycle 
 - Make a request to API server using manifest file (YML) to create a POD
 - API server will save the POD info in ETCD
 - Schedular find un-scheduled POD info and schedule that POD for execution in NODE
 - Kubelet will see that POD Execution schedule and it will trigger DOCKER Runtime
 - Docker Runtime will runs that container inside the POD.
 
-Note: POD is ephemeral (lives for short period of time)
+**Note:** POD is ephemeral (lives for short period of time)
 - When POD is re-created then POD IP will change
 - It is not recommended to access the POD using POD ID
 - We will use "Kubernetes Service" component to execute the PODs
@@ -329,7 +329,8 @@ ________________________________________________________________________________
 - We can scale up and scale down PODS using Replica Set also
 -  The only difference between Replication Controller and Replication Set is 'Selector support'
 
-- We have 2 types of Selectors<br>
+- We have 2 types of Selectors
+<br></br>
 **1) Equality Selector**<br>
 Ex:
 ```
@@ -392,7 +393,7 @@ spec:
 ```
 
 _______________________________________________________________________________________________________________________________________________________
-## What is DaemonSet ?
+## What is Daemon Set ?
 - A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. As nodes are added to the cluster, Pods are added to them. As nodes are removed from the cluster, those Pods are garbage collected. 
 - Deleting a DaemonSet will clean up the Pods it created.
 - Some typical uses of a DaemonSet are:
