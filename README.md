@@ -226,8 +226,8 @@ kubectl get svc
 **Note:** In CluterIP one VIRTUAL IP will be assigned for our service. Using that ClusterIP we can access service with in the cluster.
 
 - If we want to expose our service outside cluster we need to use NodePort Service
----
 ```bash
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -242,7 +242,7 @@ spec:
 	  #nodePort: 32611
 ...
 ```
--  For NodePort service kubernetes will assign random port number we don't specify nodePort in manifest file
+- For NodePort service kubernetes will assign random port number we don't specify nodePort in manifest file
 - We can access our service outside cluster using any cluster machine public ip with node port
 **Note**: Enable node port in security group.
 
@@ -252,88 +252,6 @@ URL access to app : http://ec2-vm-ip:nodeport/context-path
 Q) What is the range of Node PORT in k8s cluster?
 Ans) 30000 - 32767
 
-_______________________________________________________________________________________________________________________________________________________
-
-
--> In the above scenario we have created the POD manually (it is not recommended)
-
--> If we create the POD then K8S will not provide high availability
-
-
-# lets test it by deleting our pod
-$ kubectl delete pod <pod-name>
-
-Note: once pod got delete, k8s not creating another pod and application went down (not accessible)
-
-
--> If we want to achieve high availability then we should not create pods manually
-
-
--> We need to use K8S components to create PODS then k8s will provide high availability for our application
-
-
-Note: High Availability means always our application should be accessible
-
-ReplicationController
-ReplicationSet
-DaemonSet
-Deployment
-StatefulSets
-
-+++++++++++++++++++++++++++++
-What is Replication Controller ?
-++++++++++++++++++++++++++++
-
--> It is one of the key feature in k8s
-
--> It is responsible to manage POD lifecycle
-
--> It will make sure given no.of POD replicas are running at any point of time.
-
-Note: if any POD got crashed/deleted/dead then Replication Controller will replace it.
-
--> Replication Controller is providing facility to create multiple PODS and it will make sure PODS always exists to run our application.
-
--> Using Replication controller we can achieve High Availability
-
--> Replication Controller and PODS are associated with Labels and Selectors.
-
----
-# pod manifest configuration
-apiVersion: v1
-kind: ReplicationController
-metadata:
- name: javawebapprc
-spec: 
-  replicas: 1
-  selector:
-    app: javawebapp
-  template:
-    metadata:
-      name: javawebapppod
-      labels:
-        app: javawebapp
-    spec:
-      containers:
-       - name: javawebappcontainer
-         image: ashokit/javawebapp
-         ports:
-          - containerPort: 8080
----
-# node-port service manifest
-apiVersion: v1
-kind: Service
-metadata:
-  name: javawebappsvc
-spec:
-  type: NodePort
-  selector:
-    app: javawebapp
-  ports:
-     - port: 80
-       targetPort: 8080
-
-...
 - In the above scenario we have created the POD manually (it is not recommended)
 - If we create the POD then K8S will not provide high availability
 _____________________________________________________________________________________________________________________________________________
