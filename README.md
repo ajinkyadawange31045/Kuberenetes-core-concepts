@@ -2,18 +2,19 @@
 
 Kubernets Resources / Objects / Workloads <br>
 
-***Container
-POD
-Namespaces
-Service
-Deployment
-ReplicationController
-ReplicationSet
-DaemonSets
-PersistentVolumes
-StatefulSets
-Role
-Secret Config Maps***
+Container<br>
+POD<br>
+Namespaces<br>
+Service<br>
+Deployment<br>
+ReplicationController<br>
+ReplicationSet<br>
+DaemonSets<br>
+PersistentVolumes<br>
+StatefulSets<br>
+Role<br>
+Secret Config Maps<br>
+
 
 - We are using Docker to create Containers for our application
 - Docker will be used as runtime engine in kubernetes cluster
@@ -24,7 +25,7 @@ Secret Config Maps***
 - POD is a smallest building block which we can deploy in K8S cluster
 - Containers will be wrapped under one unit called POD (Logical Grouping)
 
-**Note:** In Docker, container is a smalletst part that we can deploy where as in K8S POD is smallet part we can deploy	
+**Note:** In Docker, container is a smalletst part that we can deploy where as in K8S POD is smallet part we can deploy	<br>
 **Note:** To get clarify on PODS, we need to understand Namespaces first in K8S
 
 _______________________________________________________________________________________________________________________________________________________
@@ -328,13 +329,15 @@ ________________________________________________________________________________
 - We can scale up and scale down PODS using Replica Set also
 -  The only difference between Replication Controller and Replication Set is 'Selector support'
 
-- We have 2 types of Selectors
-**1) Equality Selector**
+- We have 2 types of Selectors<br>
+**1) Equality Selector**<br>
 Ex:
+```
 selector:
   app: javawebappp
-  
-**2) Set based Selector**
+```
+
+**2) Set based Selector**<br>
 Ex:
 ```
 selector:
@@ -425,10 +428,10 @@ spec:
 - POD creation using ReplicationController
 - POD creation using ReplicaSet
 - POD creation using DaemonSet
-
+<br></br>
 - In above concepts Auto-Scaling feature not available (Manuallu we need to scale our pods)
 - There is no option to rollback our pods creation.
-= To overcome these problems We have "Deployment" concept
+- To overcome these problems We have "Deployment" concept
 
 _______________________________________________________________________________________________________________________________________________________
 ## What is Deployment ?
