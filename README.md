@@ -2,18 +2,18 @@
 
 Kubernets Resources / Objects / Workloads <br>
 
-Container<br>
-POD<br>
-Namespaces<br>
-Service<br>
-Deployment<br>
-ReplicationController<br>
-ReplicationSet<br>
-DaemonSets<br>
-PersistentVolumes<br>
-StatefulSets<br>
-Role<br>
-Secret Config Maps<br>
+- Container<br>
+- POD<br>
+- Namespaces<br>
+- Service<br>
+- Deployment<br>
+- ReplicationController<br>
+- ReplicationSet<br>
+- DaemonSets<br>
+- PersistentVolumes<br>
+- StatefulSets<br>
+- Role<br>
+- Secret Config Maps<br>
 
 
 - We are using Docker to create Containers for our application
