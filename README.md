@@ -14,7 +14,7 @@ Kubernets Resources / Objects / Workloads <br>
 - StatefulSets<br>
 - Role<br>
 - Secret Config Maps<br>
-
+<br></br>
 
 - We are using Docker to create Containers for our application
 - Docker will be used as runtime engine in kubernetes cluster
